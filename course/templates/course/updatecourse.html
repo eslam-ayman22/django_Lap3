@@ -1,0 +1,15 @@
+{%extends 'parent.html' %}
+
+
+{%block Title%}Update course{%endblock%}
+
+
+
+{% block content %}
+
+<form class="form container mt-4">
+      {% csrf_token %}
+{{ form.as_p }}
+{% endblock %}
+
+</form>

@@ -1,0 +1,37 @@
+{% extends 'parent.html' %}
+
+{% block Title %}Add Trainee{% endblock %}
+
+{% block content %}
+<form class="form container mt-4" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">Enter Name</label>
+        <input type="text" name="trname" class="form-control" placeholder="Please Enter Your Name">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Enter Email</label>
+        <input type="email" name="tremail" class="form-control" placeholder="Please Enter Your Email">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Enter Course Name</label>
+        <select name="trainee" class="form-control">
+            <option>Select Trainee Name</option>
+            {% for trainee in trainees %}
+            <option value = "{{trainee.id}}">{{trainee.name}}</option>
+            {% endfor %}
+        </select>
+
+    </div>
+
+     <div class="mb-3">
+        <label class="form-label">Enter img</label>
+        <input type="file" name="trimg" class="form-control" placeholder="Please Enter Your Email">
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">Submit</button>
+</form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{%extends 'parent.html' %}
+
+{%block Title%}List of Courses {%endblock%}
+{%block content%}
+<table class="table table-bordered table-hover table-striped mt-4">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+             <th>Created at</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for course in courses %}
+            <tr>
+                <td>{{course.id}}</td>
+                <td>{{course.name}}</td>
+                <td>{{course.description}}</td>
+                <td>{{course.created_at}}</td>
+                <td>
+                    <a href="" class="btn btn-outline-warning">Update</a>
+                    <button class="btn btn-outline-danger">Delete</button>
+                </td>
+            </tr>
+        {%endfor%}
+    </tbody>
+</table>
+
+{%endblock%}
