@@ -1,11 +1,10 @@
 from django.urls import path
 from . import views
-
+from .views import ListTraineeView ,AddTraineeView ,UpdateTrainee
 urlpatterns =[
-    path('' , views.ListOfTrainee , name='ListOfTrainee'),
-    path('add', views.AddTrainee , name='AddTrainee'),
-    path('update/<int:id>' , views.UpdateTrainee , name='UpdateTrainee'),
-    path('delete/<int:id>' , views.DeleteTrainee , name='DeleteTrainee'),
-    path('login' , views.login , name='Login'),
-    path('register' , views.register , name='register')
+    path('', ListTraineeView.as_view(), name="trainee_list"),
+    path("trainees/add/", AddTraineeView.as_view(), name="add_trainee"),
+    path('update/<int:trainee_id>/', UpdateTrainee.as_view(), name='UpdateTrainee'),
+    path('delete/<int:trainee_id>' , views.DeleteTrainee , name='DeleteTrainee'),
+
 ]

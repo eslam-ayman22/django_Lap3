@@ -1,59 +1,48 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render ,redirect
-
-from course.models import Course
 from .models import Trainee ,Course
+from django.views.generic import ListView, CreateView
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic.edit import UpdateView
+
+
+# list and add using class based view
+
+class ListTraineeView(LoginRequiredMixin,ListView):
+    model = Trainee
+    template_name = "trainee/ListView.html"
+    context_object_name = "trainees"
+
+    def get_queryset(self):
+        return Trainee.objects.filter(isactive=True)
 
 
 
-# Create your views here.
-def ListOfTrainee(req):
-    context = {
-        'trainees': Trainee.objects.filter(isactive=True)
-    }
-    return render(req, 'trainee/list.html', context)
+class AddTraineeView(LoginRequiredMixin,CreateView):
+    model = Trainee
+    template_name = "trainee/addtrainee.html"
+    fields = ["name", "email", "img", "course"]
+    success_url = reverse_lazy("trainee_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["courses"] = Course.objects.all()
+        return context
 
 
-def AddTrainee(req):
-    context = {
-        'trainees': Course.objects.all()
-    }
-    if req.method == 'POST':
-        Trainee.objects.create(
-            name=req.POST['trname'],
-            email=req.POST['tremail'],
-            img=req.FILES['trimg'],
-            course=Course.objects.get(id=req.POST['trainee'])
-        )
+#update traine using generic view
 
-        return redirect('ListOfTrainee')
-
-    return render(req, 'trainee/addtrainee.html', context)
+class UpdateTrainee(LoginRequiredMixin,UpdateView):
+    model = Trainee
+    fields = ['name', 'email', 'img']
+    template_name = 'trainee/UpdateView.html'
+    pk_url_kwarg = 'trainee_id'
+    success_url = reverse_lazy('trainee_list')
 
 
-def UpdateTrainee(req , id):
-    context = {'old':
-                   Trainee.objects.get(trainee_id=id)}
-    if (req.method == 'POST'):
-        Trainee.objects.filter(trainee_id=id).update(
-            name=req.POST['trname'],
-            email=req.POST['tremail'],
-            img=req.FILES['trimg']
-        )
-        return redirect('ListOfTrainee')
+def DeleteTrainee(req , trainee_id):
+    Trainee.objects.filter(trainee_id=trainee_id).update(isactive=False)
+    return redirect('trainee_list')
 
-    return render(req, 'trainee/updatetrainee.html', context)
-
-def DeleteTrainee(req , id):
-    Trainee.objects.filter(trainee_id=id).update(isactive=False)
-    return redirect('ListOfTrainee')
-
-
-
-
-def login(req):
-    return render(req , 'trainee/login.html' ,context={'login':login})
-
-
-def register(req):
-    return render(req , 'trainee/register.html' ,context={'register':register})
