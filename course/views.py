@@ -11,7 +11,7 @@ def ListOfCourse(req):
     context = {
         'courses': Course.objects.all()
     }
-    return render(req , 'course/ListView.html',context)
+    return render(req , 'course/list.html',context)
 
 def AddCourse(req):
     form = AddCourseForm()
